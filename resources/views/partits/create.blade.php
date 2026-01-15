@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.equip')
 @section('content')
 <div class="container">
   <h1 class="title">Crear nou partit</h1>
