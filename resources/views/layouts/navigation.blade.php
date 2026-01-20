@@ -20,6 +20,14 @@
                         {{ __('Estadis') }}
                     </x-nav-link>
 
+                    <x-nav-link :href="route('jugadoras.index')" :active="request()->routeIs('jugadoras.*')">
+                        {{ __('Jugadoras') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('partits.index')" :active="request()->routeIs('partits.*')">
+                        {{ __('Partits') }}
+                    </x-nav-link>
+
                     @auth
                         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                             {{ __('Dashboard') }}
@@ -57,6 +65,18 @@
                                         onclick="event.preventDefault();
                                                     this.closest('form').submit();">
                                     {{ __('Log Out') }}
+                                </x-dropdown-link>
+
+                                <x-dropdown-link :href="route('setLocale','ca')">
+                                    {{ __('Català') }}
+                                </x-dropdown-link>
+
+                                <x-dropdown-link :href="route('setLocale','es')">
+                                    {{ __('Castellano') }}
+                                </x-dropdown-link>
+
+                                <x-dropdown-link :href="route('setLocale','en')">
+                                    {{ __('English') }}
                                 </x-dropdown-link>
                             </form>
                         </x-slot>
