@@ -10,12 +10,7 @@ class Jugadora extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nom',          // en lugar de 'nombre'
-        'cognom',       // en lugar de 'apellido'
-        'numero',
-        'posicio',      // en lugar de 'posicion'
-        'equip_id',
-        // 'estadi_id' se elimina: se accede vía equipo->estadi si es necesario
+        'nom', 'equip_id', 'posicio', 'dorsal', 'edat',
     ];
 
     /**

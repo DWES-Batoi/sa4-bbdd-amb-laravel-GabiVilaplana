@@ -8,6 +8,9 @@ use App\Models\Estadi;
 use App\Services\JugadoraService;
 use Illuminate\Http\Request;
 
+use App\Http\Controllers\Controller;
+
+
 class JugadoraController extends Controller
 {
     protected $jugadoraService;
@@ -19,8 +22,7 @@ class JugadoraController extends Controller
 
     public function index()
     {
-        $jugadoras = $this->jugadoraService->getAll();
-        return view('jugadoras.index', compact('jugadoras'));
+        return Jugadora::query()->get(); // JSON automàtic
     }
 
     public function create()
@@ -30,26 +32,17 @@ class JugadoraController extends Controller
         return view('jugadoras.create', compact('equips', 'estadis'));
     }
 
-    public function store(Request $request)
+        public function store(JugadoraRequest $request)
     {
-        $validated = $request->validate([
-            'nom' => 'required|string|max:255',
-            'cognom' => 'required|string|max:255',
-            'numero' => 'nullable|integer|min:1',
-            'posicio' => 'nullable|string|max:100',
-            'equip_id' => 'required|exists:equips,id',
-            // 'estadi_id' se elimina → no está en el modelo corregido
-        ]);
+        $jugadora = Jugadora::create($request->validated());
 
-        $this->jugadoraService->create($validated);
-
-        return redirect()->route('jugadoras.index')
-                         ->with('success', 'Jugadora creada correctament.');
+        return response()->json($jugadora, 201);
     }
+
 
     public function show(Jugadora $jugadora)
     {
-        return view('jugadoras.show', compact('jugadora'));
+        return $jugadora; // JSON automàtic (Route Model Binding)
     }
 
     public function edit(Jugadora $jugadora)
@@ -59,28 +52,17 @@ class JugadoraController extends Controller
         return view('jugadoras.edit', compact('jugadora', 'equips'));
     }
 
-    public function update(Request $request, Jugadora $jugadora)
-    {
-        $validated = $request->validate([
-            'nom' => 'required|string|max:255',
-            'cognom' => 'required|string|max:255',
-            'numero' => 'nullable|integer|min:1',
-            'posicio' => 'nullable|string|max:100',
-            'equip_id' => 'required|exists:equips,id',
-            // 'estadi_id' eliminado
-        ]);
+    public function update(JugadoraRequest $request, Jugadora $jugadora)
+{
+    $jugadora->update($request->validated());
 
-        $this->jugadoraService->update($jugadora, $validated);
-
-        return redirect()->route('jugadoras.index')
-                         ->with('success', 'Jugadora actualitzada correctament.');
-    }
+    return response()->json($jugadora, 200);
+}
 
     public function destroy(Jugadora $jugadora)
-    {
-        $this->jugadoraService->delete($jugadora);
+{
+    $jugadora->delete();
 
-        return redirect()->route('jugadoras.index')
-                         ->with('success', 'Jugadora eliminada correctament.');
-    }
+    return response()->noContent(); // 204
+}
 }
