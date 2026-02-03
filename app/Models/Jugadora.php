@@ -10,7 +10,12 @@ class Jugadora extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nom', 'equip_id', 'posicio', 'dorsal', 'edat',
+        'nom',
+        'cognom',
+        'dorsal', // Asegúrate de que se llame así y no 'numero'
+        'edat',   // ¡Asegúrate de añadir este!
+        'posicio',
+        'equip_id',
     ];
 
     /**

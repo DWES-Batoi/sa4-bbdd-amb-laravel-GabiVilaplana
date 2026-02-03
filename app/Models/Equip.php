@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+// Importante: asegúrate de que se importe el modelo de Jugadora si está en otra carpeta, 
+// aunque si están ambos en App\Models no hace falta.
 
 class Equip extends Model
 {
@@ -11,14 +13,16 @@ class Equip extends Model
 
     protected $fillable = ['nom', 'estadi_id', 'titols', 'escut'];
 
+    // Relación con el Estadio (esta ya la debes tener para que funcione el Index)
     public function estadi()
     {
         return $this->belongsTo(Estadi::class);
     }
 
-    public function manager()
+    // ✅ ESTO ES LO QUE FALTA: Un equipo tiene muchas jugadoras
+    public function jugadoras()
     {
-        return $this->hasOne(User::class, 'equip_id')
-            ->where('role', 'manager');
+        // Usamos hasMany porque un equipo tiene muchas jugadoras
+        return $this->hasMany(Jugadora::class);
     }
 }

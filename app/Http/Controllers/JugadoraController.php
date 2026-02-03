@@ -7,9 +7,8 @@ use App\Models\Equip;
 use App\Models\Estadi;
 use App\Services\JugadoraService;
 use Illuminate\Http\Request;
-
+use App\Http\Requests\JugadoraRequest; // Asegúrate de importar tu Request
 use App\Http\Controllers\Controller;
-
 
 class JugadoraController extends Controller
 {
@@ -20,49 +19,56 @@ class JugadoraController extends Controller
         $this->jugadoraService = $jugadoraService;
     }
 
+    // CORREGIDO: Ahora devuelve la vista index.blade.php
     public function index()
     {
-        return Jugadora::query()->get(); // JSON automàtic
+        $jugadoras = Jugadora::all(); 
+        return view('jugadoras.index', compact('jugadoras'));
     }
 
     public function create()
     {
-        $equips = Equip::all();   // En catalán, como el modelo
-        $estadis = Estadi::all(); // Opcional: solo si decides mantener estadi_id (no recomendado)
+        $equips = Equip::all();
+        $estadis = Estadi::all();
         return view('jugadoras.create', compact('equips', 'estadis'));
     }
 
-        public function store(JugadoraRequest $request)
+    // CORREGIDO: Redirige tras guardar en lugar de soltar JSON
+    public function store(JugadoraRequest $request)
     {
-        $jugadora = Jugadora::create($request->validated());
+        Jugadora::create($request->validated());
 
-        return response()->json($jugadora, 201);
+        return redirect()->route('jugadoras.index')
+                         ->with('success', 'Jugadora creada correctamente');
     }
 
-
+    // CORREGIDO: Ahora devuelve la vista show.blade.php
     public function show(Jugadora $jugadora)
     {
-        return $jugadora; // JSON automàtic (Route Model Binding)
+        return view('jugadoras.show', compact('jugadora'));
     }
 
     public function edit(Jugadora $jugadora)
     {
         $equips = Equip::all();
-        // $estadis = Estadi::all(); ← solo si lo usas (mejor omitirlo)
         return view('jugadoras.edit', compact('jugadora', 'equips'));
     }
 
+    // CORREGIDO: Redirige tras actualizar
     public function update(JugadoraRequest $request, Jugadora $jugadora)
-{
-    $jugadora->update($request->validated());
+    {
+        $jugadora->update($request->validated());
 
-    return response()->json($jugadora, 200);
-}
+        return redirect()->route('jugadoras.index')
+                         ->with('success', 'Jugadora actualizada');
+    }
 
+    // CORREGIDO: Redirige tras eliminar
     public function destroy(Jugadora $jugadora)
-{
-    $jugadora->delete();
+    {
+        $jugadora->delete();
 
-    return response()->noContent(); // 204
-}
+        return redirect()->route('jugadoras.index')
+                         ->with('success', 'Jugadora eliminada');
+    }
 }
