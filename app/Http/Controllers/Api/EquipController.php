@@ -3,24 +3,56 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Equip;
+use App\Http\Requests\StoreEquipRequest;
 use App\Http\Resources\EquipResource;
+use App\Models\Equip;
 use Illuminate\Http\Request;
 
 class EquipController extends Controller
 {
-    public function index() {
-        return EquipResource::collection(Equip::all());
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        return EquipResource::collection(Equip::query()->paginate(10));
     }
 
-    public function store(Request $request) {
-        $data = $request->validate(['nom' => 'required|string|max:255', 'estadi' => 'nullable|string']);
-        $equip = Equip::create($data);
-        return response()->json(new EquipResource($equip), 201);
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreEquipRequest $request)
+    {
+        $equip = Equip::create($request->validated());
+        
+        return response()->json($equip, 201);
     }
 
-    public function destroy(Equip $equip) {
+    /**
+     * Display the specified resource.
+     */
+    public function show(Equip $equip)
+    {
+        return new EquipResource($equip);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(StoreEquipRequest $request, Equip $equip)
+    {
+        $equip->update($request->validated());
+        
+        return response()->json($equip, 200);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Equip $equip)
+    {
         $equip->delete();
-        return response()->noContent();
+        
+        return response()->noContent(); // 204
     }
 }
