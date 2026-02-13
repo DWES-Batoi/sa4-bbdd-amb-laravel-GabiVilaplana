@@ -16,8 +16,12 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'equip_id',
+        'google_id',
+        'avatar',
     ];
+
+    public const ROLE_ADMIN = 'admin';
+    public const ROLE_CONVIDAT = 'convidat';
 
     protected $hidden = [
         'password',

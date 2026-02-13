@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Estadi;
 use Illuminate\Http\Request;
+use App\Services\LLMService;
 
 class EstadiController extends Controller
 {
@@ -17,7 +18,12 @@ class EstadiController extends Controller
     // GET /estadis/{estadi}
     public function show(Estadi $estadi)
     {
-        return view('estadis.show', compact('estadi'));
+        // Creamos el "mensaje" para la IA
+        $prompt = "Escriu una descripció breu, amable i en català de l'estadi {$estadi->nom} que té una capacitat de {$estadi->capacitat} espectadors. Inclou una dada curiosa i un to divulgatiu. Màxim 80 paraules.";
+
+        $descripcio = LLMService::getResponse($prompt);
+
+        return view('estadis.show', compact('estadi', 'descripcio'));
     }
 
     // GET /estadis/create

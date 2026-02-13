@@ -24,6 +24,12 @@
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
+        <div class="mt-4 flex items-center justify-center border-t pt-4">
+            <a href="{{ route('google.redirect') }}" class="bg-white text-gray-700 font-bold py-2 px-4 rounded border shadow hover:bg-gray-100">
+                {{ __('Inicia sessió amb Google (Convidat)') }}
+            </a>
+        </div>
+
         <!-- Remember Me -->
         <div class="block mt-4">
             <label for="remember_me" class="inline-flex items-center">
